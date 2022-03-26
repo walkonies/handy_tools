@@ -83,7 +83,7 @@ def randomLet():
 	returns random letter -> chr
 	'''
 	letr = chr(random.randrange(ord('a'), ord('z')+ 1))
-	return  letr if random.random() > 0.5 else letr.lower()
+	return  letr if random.random() > 0.5 else letr.upper()
 
 def makeList():
 	'''
@@ -104,8 +104,6 @@ def subList(ls, start, end):
 	for i in range(start, end+1, -1 if start < 0 else 1):
 		new_ls.append(ls[i])
 	return new_ls
-
-
 
 
 def printList(lst, sep=', '):
@@ -178,7 +176,7 @@ def makeTxt(data):
 	'''
 	List -> .txt
 	'''
-	file = f'/Users/walker/Desktop/{getTime()}.txt'
+	file = f'{dir_path}/{getTime()}.txt'
 	with open (file, 'w') as f:
 		write(f,data)
 
@@ -222,7 +220,7 @@ def timeStamp():
 
 def login(sys):
 	'''
-	Login to secondary system using ssh
+	SSH login to remote system
 	'''
 	os.system(f'ssh {sys}')
 
@@ -232,10 +230,10 @@ def logIP():
 	'''
 	Logs IP address to IP.txt
 	'''
-	path = IP_LOG
+	file = IP_LOG
 	ip_address = getIP()
 	data = f'{timeStamp()} : {ip_address}'
-	log(path, data)
+	log(file, data)
 
 def getIP():
 	'''
@@ -262,7 +260,6 @@ def sendFile(file):
 	'''
 	Send file from host to school ssh
 	'''
-	#username = 'a_w366'
 	address = EROS
 	destination = '/home/Students/a_w366'
 
@@ -279,7 +276,7 @@ def clear():
 def runCommand(cmd):
 	'''
 	Run command and return results -> str[]
-	!! CAUTION : RUNS COMMAND IN NEW WINDOW !! 
+	!! RUNS COMMAND IN NEW WINDOW !! 
 	'''
 	results = subprocess.run(cmd, stdout=subprocess.PIPE, text=True).stdout.strip()
 
