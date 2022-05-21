@@ -61,6 +61,7 @@ def formatSearch(website):
 
 	website = root + website.replace(' ','+')
 	return website
+
 def getHistory():
 	'''
 	Get last 10 logs of search engine history 
@@ -77,13 +78,32 @@ def getHistory():
 '''
 ##COLLECTION / PRINT TOOLS##
 '''
+LETTERS = [chr(x) for x in range(ord('a'), ord('z')+1)]
+
+def countLetters(words):
+	'''
+	returns count of letters
+	param: list or string
+	return: dict
+	'''
+	
+	count = {letter: 0 for letter in LETTERS}
+
+	if type(words) == list:
+		words = ''.join(words)
+
+	words = words.replace(' ','')
+
+	for let in words.lower():
+		count[let] += 1
+
+	return count
 
 def randomLet():
 	'''
 	returns random letter -> chr
 	'''
-	letr = chr(random.randrange(ord('a'), ord('z')+ 1))
-	return  letr if random.random() > 0.5 else letr.upper()
+	return  random.choose(LETTERS)
 
 def makeList():
 	'''
