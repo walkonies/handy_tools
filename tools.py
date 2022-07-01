@@ -34,7 +34,10 @@ def main():
 ##WHERE AM I?##
 '''
 dir_path = os.path.dirname(os.path.realpath(__name__))
-
+'''
+##WHERE THE FILE FROM?##
+'''
+file_path = os.path.dirname(os.path.realpath(__file__))
 '''
 ##WEB TOOLS##
 '''
@@ -121,7 +124,8 @@ def subList(ls, start, end):
 	Create and return sublist with start and end indicies  -> List 
 	'''
 	new_ls = []
-	for i in range(start, end+1, -1 if start < 0 else 1):
+	step = -1 if start < 0 else 1
+	for i in range(start, end+1, step):
 		new_ls.append(ls[i])
 	return new_ls
 
@@ -216,6 +220,24 @@ def write(f, data):
 		for elem in data:
 			f.write(str(elem))
 			f.write('\n')
+
+def readCSV(file):
+	'''
+	Read CSV file and return dict with lists as values
+	'''
+	data = {}
+	sep = ','
+	with open(file, 'r') as f:
+		headers = f.readline().strip().split(sep)
+		file_data = f.read().split('\n')
+
+	for header in headers:
+		data[header] = list()
+	for line in file_data:
+		d = line.split(sep)
+		for col, elem in zip(headers, d):
+			data[col].append(elem)
+	return data
 
 '''
 ##TIME TOOLS##
