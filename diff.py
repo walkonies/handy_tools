@@ -10,8 +10,8 @@ outputs to termnal
 '''
 
 def getDiff(f1, f2):
-	new_file = 'txt/diff-'+getTime()+'.txt'
-	print(new_file)
+	time = getTime()
+	new_file = 'txt/diff-'+time+'.txt'
 	os.system(f'diff -u {f1} {f2} >> {new_file}')
 	return new_file
 
@@ -30,10 +30,10 @@ def readDiff(text_file):
     return (added, rem)
 
 def showDiff(added, rem):
-	print('ADDED:')
+	print('****ADDED****')
 	for elem in added:
 		print(elem.strip())
-	print('\nREMOVED')
+	print('\n****REMOVED****')
 	for elem in rem:
 		print(elem.strip())
 
@@ -42,7 +42,7 @@ def main():
 		f1 = sys.argv[1]
 		f2 = sys.argv[2]
 	else:
-		fi, f2 = input('Files: ').split()
+		f1, f2 = input('Files: ').split()
 
 	diff = getDiff(f1,f2)
 	added, rem = readDiff(diff)
