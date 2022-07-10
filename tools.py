@@ -83,6 +83,30 @@ def getHistory():
 '''
 LETTERS = [chr(x) for x in range(ord('a'), ord('z')+1)]
 
+def removeAll(rem, arr):
+	'''
+	removes all instances of {rem} in place in list
+	'''
+	while(rem in arr):
+		arr.pop(arr.index(rem))
+
+def makeUnique(items):
+	'''
+	creates new list with renamed duplicates
+	'''
+	no_dup = []
+	for elem in items:
+		if elem not in no_dup:
+			no_dup.append(elem)
+		else:
+			elem+='-0'
+			while(elem in no_dup):
+				num = int(elem[-1])
+				num += 1
+				elem = elem[:-1] + str(num)
+			no_dup.append(elem)
+	return no_dup
+
 def countLetters(words):
 	'''
 	returns count of letters
