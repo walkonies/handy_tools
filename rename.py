@@ -56,6 +56,16 @@ def checkDup(items):
 			no_dup.append(elem)
 	return no_dup
 
+def rename(old_names, new_names):
+	ext = '.txt'
+
+	for old, new in zip(old_names, new_names):
+		if (old.index('.') != -1):
+			ext = old[old.index('.'):]
+		cmd = f'mv {old} {new}.{ext}'
+		print(cmd)
+
+	print('Rename complete!')
 
 def main():
 	# use python3 clips.py {dir}
@@ -66,7 +76,7 @@ def main():
 		dir =' '.join(sys.argv[1:])
 
 	cmd = f'ls -l {dir}'
-	os.system(cmd)
+	runCommand(cmd)
 
 	items = runCommand(cmd)
 	print(items)
@@ -77,15 +87,7 @@ def main():
 	dates = getDates(items)
 	dates = checkDup(dates)
 
-	ext = input("Ext: ")
-	if '.' not in ext:
-		ext = '.txt'
-
-	for old, new in zip(names, dates):
-		cmd = f'mv {old} {new}.{ext}'
-		runCommand(cmd)
-
-	print('Rename complete!')
+	rename(names, dates)
 
 if __name__ == '__main__':
 	main()
