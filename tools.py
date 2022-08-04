@@ -107,6 +107,9 @@ def makeUnique(items):
 			no_dup.append(elem)
 	return no_dup
 
+def wordCount():
+	return len(str(makeList()[0]).split(' '))
+
 def countLetters(words):
 	'''
 	returns count of letters
@@ -163,9 +166,8 @@ def printList(lst, sep=', '):
 
 
 	for i, elem in enumerate(lst):
-		if i == 0:
-			print(f'[{elem}', end=sep)
-		elif i == num_items-1:
+		print('[', end='')
+		if i == num_items-1:
 			print(f'{elem}]')
 		else:
 			print(elem, end=sep)
