@@ -7,13 +7,7 @@ import webbrowser
 import random
 import collections  # Plans to use Counter() !! 
 from tqdm import tqdm
-
-'''
-##Systems##
-'''
-EROS = 'a_w366@eros.cs.txstate.edu'
-FRONTERA = 'a_w366@frontera.tacc.utexas.edu'
-
+from user import *
 
 def main():
 	'''
@@ -108,6 +102,9 @@ def makeUnique(items):
 	return no_dup
 
 def wordCount():
+	'''
+	returns word count when writing an essay
+	'''
 	return len(str(makeList()[0]).split(' '))
 
 def countLetters(words):
