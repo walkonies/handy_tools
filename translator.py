@@ -55,7 +55,16 @@ class Translator:
 	def __str__(self):
 		return f'<Translator object> in_lang: {self.in_lang} out_lang: {self.out_lang}'
 
-
+def printList(lst):
+	max_size = 5
+	if len(lst) > max_size:
+		lst = lst[:max_size]
+	print('[',end='')
+	for i,item in enumerate(lst):
+		if i != len(lst)-1:
+			print(item, end=', ')
+		else:
+			print(item, end=']\n')
 
 def main():
 	if len(sys.argv) > 2:
@@ -80,7 +89,8 @@ def main():
 			print('Translation:', translator.getTranslation(text))
 			synonyms = translator.getSimilar(text)
 			if synonyms:
-				print('Possible synonyms:', synonyms[0][1])
+				print('Possible synonyms:', end=' ')
+				printList(synonyms[0][1])
 			print()
 
 if __name__ == '__main__':
