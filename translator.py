@@ -3,10 +3,12 @@ import sys
 
 class Translator:
 	LANGUAGES = googletrans.LANGUAGES
+	UNKOWN = '??'
+
 	def __init__(self):
 		self.translator = googletrans.Translator()
-		self.in_lang = 'en'
-		self.out_lang = 'es'
+		self.in_lang = self.UNKOWN
+		self.out_lang = self.UNKOWN
 	def setLang(self, inp, out):
 		if inp in self.LANGUAGES:
 			self.in_lang = inp
@@ -26,8 +28,19 @@ class Translator:
 		return self.translate(text).text
 	def getSimilar(self, text):
 		return self.translate(text).extra_data['all-translations']
+	def getSource(self):
+		return self.in_lang if self.in_lang != self.UNKOWN else None
+	def getDestination(self):
+		return self.out_lang if self.out_lang != self.UNKOWN else None
 	def translate(self, text):
-		return self.translator.translate(text, src=self.in_lang, dest=self.out_lang)
+		source = self.getSource()
+		destination = self.getDestination()
+		if source and destination:
+			return self.translator.translate(text, src=source, dest=destination)
+		elif source:
+			return self.translator.translate(text, src=source)
+		else:
+			return self.translator.translate(text, dest=destination)
 	def detectLang(self, text):
 		return self.translator.detect(text).lang
 	def getLangID(self, lang):
