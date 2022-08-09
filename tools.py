@@ -7,7 +7,6 @@ import webbrowser
 import random
 import collections  # Plans to use Counter() !! 
 from tqdm import tqdm
-from user import *
 
 def main():
 	'''
@@ -168,6 +167,21 @@ def printList(lst, sep=', '):
 			print(f'{elem}]')
 		else:
 			print(elem, end=sep)
+
+def printDict(dic):
+	'''
+	Print dictionary
+	'''
+	for elem in dic.keys():
+		items = dic[elem]
+		print('{'+str(elem)+'}', end ='\n\t')
+		if type(items) == list:
+			printList(items)
+		elif type(items) == dict:
+			printDict(items)
+		else:
+			print(items)
+	
 
 def printColl(col):
 	'''
