@@ -20,8 +20,9 @@ class Translator:
 		else:
 			ID = self.getLangID(out) 
 			if ID:
-				self.out = ID
+				self.out_lang = ID
 		print(f'[{self.in_lang}] -> [{self.out_lang}]')
+		print('Enter "swap" to flip')
 	def getTranslation(self, text):
 		return self.translate(text).text
 	def getSimilar(self, text):
@@ -55,6 +56,7 @@ def main():
 	translator = Translator()
 	translator.setLang(in_lang, out_lang)
 
+	print('\nEnter "q" to quit')
 	while True:
 		text = input("Text: ")
 		if text == 'q':
