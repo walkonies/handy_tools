@@ -1,5 +1,4 @@
 import googletrans
-from tools import printDict
 import sys
 
 class Translator:
