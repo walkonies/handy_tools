@@ -22,9 +22,7 @@ class Translator:
 			ID = self.getLangID(out) 
 			if ID:
 				self.out_lang = ID
-	# REMOVE FROM CLASS
-		self.showSelf()
-	def showSelf(self):
+	def show(self):
 		print(str(self)[str(self).index('>')+2:])
 	def getTranslation(self, text):
 		return self.translate(text).text
@@ -81,6 +79,7 @@ def main():
 
 	translator = Translator()
 	translator.setLang(in_lang, out_lang)
+	translator.show()
 
 	print('\nEnter "q" to quit')
 	while True:
@@ -89,6 +88,7 @@ def main():
 			break
 		elif text == 'swap':
 			translator.swap()
+			translator.show()
 		else:
 			translation = translator.getTranslation(text)
 			synonyms = translator.getSimilar(text)
