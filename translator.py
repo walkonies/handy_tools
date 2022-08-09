@@ -8,7 +8,7 @@ class Translator:
 	def __init__(self):
 		self.translator = googletrans.Translator()
 		self.in_lang = self.UNKOWN
-		self.out_lang = self.UNKOWN
+		self.out_lang = 'en'
 	def setLang(self, inp, out):
 		if inp in self.LANGUAGES:
 			self.in_lang = inp
