@@ -22,13 +22,17 @@ class Translator:
 			ID = self.getLangID(out) 
 			if ID:
 				self.out_lang = ID
+	# REMOVE FROM CLASS
 		self.showSelf()
 	def showSelf(self):
 		print(str(self)[str(self).index('>')+2:])
 	def getTranslation(self, text):
 		return self.translate(text).text
 	def getSimilar(self, text):
-		return self.translate(text).extra_data['all-translations']
+		data = self.translate(text).extra_data['all-translations']
+		if data:
+			return data[0][1]
+		return None
 	def getSource(self):
 		return self.in_lang if self.in_lang != self.UNKOWN else None
 	def getDestination(self):
@@ -86,12 +90,12 @@ def main():
 		elif text == 'swap':
 			translator.swap()
 		else:
-			translation = translator.translate(text)
-			print('Translation:', translator.getTranslation(text))
+			translation = translator.getTranslation(text)
 			synonyms = translator.getSimilar(text)
+			print('Translation:', translation)
 			if synonyms:
 				print('Possible synonyms:', end=' ')
-				printList(synonyms[0][1])
+				printList(synonyms)
 			print()
 
 if __name__ == '__main__':
