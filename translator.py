@@ -22,8 +22,9 @@ class Translator:
 			ID = self.getLangID(out) 
 			if ID:
 				self.out_lang = ID
-		print(f'[{self.in_lang}] -> [{self.out_lang}]')
-		print('Enter "swap" to flip')
+		self.showSelf()
+	def showSelf(self):
+		print(str(self)[str(self).index('>')+2:])
 	def getTranslation(self, text):
 		return self.translate(text).text
 	def getSimilar(self, text):
@@ -53,7 +54,7 @@ class Translator:
 	def swap(self):
 		self.setLang(self.out_lang, self.in_lang)
 	def __str__(self):
-		return f'<Translator object> in_lang: {self.in_lang} out_lang: {self.out_lang}'
+		return f'<Translator object> [{self.in_lang}] -> [{self.out_lang}]'
 
 def printList(lst):
 	max_size = 5
