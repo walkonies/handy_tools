@@ -9,19 +9,13 @@ class Translator:
 		self.translator = googletrans.Translator()
 		self.in_lang = self.UNKOWN
 		self.out_lang = 'en'
-	def setLang(self, inp, out):
+	def setLang(self, input_lang, output_lang):
+		inp = self.getLangID(input_lang)
+		out = self.getLangID(output_lang)
 		if inp in self.LANGUAGES or inp == self.UNKOWN:
 			self.in_lang = inp
-		else:
-			ID = self.getLangID(inp) 
-			if ID:
-				self.in_lang = ID
 		if out in self.LANGUAGES or out == self.UNKOWN:
 			self.out_lang = out
-		else:
-			ID = self.getLangID(out) 
-			if ID:
-				self.out_lang = ID
 	def show(self):
 		print(str(self)[str(self).index('>')+2:])
 	def getTranslation(self, text):
