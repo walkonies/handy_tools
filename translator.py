@@ -10,13 +10,13 @@ class Translator:
 		self.in_lang = self.UNKOWN
 		self.out_lang = 'en'
 	def setLang(self, inp, out):
-		if inp in self.LANGUAGES:
+		if inp in self.LANGUAGES or inp == self.UNKOWN:
 			self.in_lang = inp
 		else:
 			ID = self.getLangID(inp) 
 			if ID:
 				self.in_lang = ID
-		if out in self.LANGUAGES:
+		if out in self.LANGUAGES or out == self.UNKOWN:
 			self.out_lang = out
 		else:
 			ID = self.getLangID(out) 
@@ -42,8 +42,10 @@ class Translator:
 			return self.translator.translate(text, src=source, dest=destination)
 		elif source:
 			return self.translator.translate(text, src=source)
-		else:
+		elif destination:
 			return self.translator.translate(text, dest=destination)
+		else:
+			return self.translator.translate(text)
 	def detectLang(self, text):
 		return self.translator.detect(text).lang
 	def getLangID(self, lang):
