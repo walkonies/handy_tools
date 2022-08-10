@@ -4,7 +4,6 @@ import sys
 class Translator:
 	LANGUAGES = googletrans.LANGUAGES
 	UNKOWN = '??'
-
 	def __init__(self):
 		self.translator = googletrans.Translator()
 		self.in_lang = self.UNKOWN
@@ -48,6 +47,8 @@ class Translator:
 		for language in self.LANGUAGES:
 			if self.LANGUAGES[language] == lang:
 				return language
+		if self.translator.detect(lang).confidence == 1:
+			return self.detectLang(lang)
 		return None
 	def swap(self):
 		self.setLang(self.out_lang, self.in_lang)
@@ -61,22 +62,13 @@ def printList(lst):
 	print('[',end='')
 	for i,item in enumerate(lst):
 		if i != len(lst)-1:
-			print(item, end=', ')
+			end = ', '
 		else:
-			print(item, end=']\n')
+			end=']\n'
+		print(item, end=end)
 
-def main():
-	if len(sys.argv) > 2:
-		in_lang = sys.argv[1]
-		out_lang = sys.argv[2]
-	else:
-		in_lang = input('In language: ')
-		out_lang = input('Out language: ')
-
-	translator = Translator()
-	translator.setLang(in_lang, out_lang)
+def run(translator):
 	translator.show()
-
 	print('\nEnter "q" to quit')
 	while True:
 		text = input("Text: ")
@@ -93,6 +85,19 @@ def main():
 				print('Possible synonyms:', end=' ')
 				printList(synonyms)
 			print()
+
+def main():
+	if len(sys.argv) > 2:
+		in_lang = sys.argv[1]
+		out_lang = sys.argv[2]
+	else:
+		in_lang = input('In language: ')
+		out_lang = input('Out language: ')
+
+	translator = Translator()
+	translator.setLang(in_lang, out_lang)
+
+	run(translator)
 
 if __name__ == '__main__':
 	main()
