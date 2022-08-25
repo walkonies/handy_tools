@@ -2,28 +2,31 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from os import path
-URL = 'https://www.amazon.com/Intel-i5-12600KF-Desktop-Processor-Unlocked/dp/B09FXFJW2F/?_encoding=UTF8&pd_rd_w=G28nJ&content-id=amzn1.sym.8cf3b8ef-6a74-45dc-9f0d-6409eb523603&pf_rd_p=8cf3b8ef-6a74-45dc-9f0d-6409eb523603&pf_rd_r=AVKVESDMB0HKX97CTNB4&pd_rd_wg=Xj0Ga&pd_rd_r=7443b95c-ee96-44a0-bfac-b6de26834c1b&ref_=pd_gw_ci_mcx_mi'
+import threading
+import time
+from tools import readCSV
+
+driver = path.dirname(path.realpath(__name__)) + '/chromedriver'
+
 class Browser():
 	def __init__(self, driver = None):
 		self.Chrome = False
 		if driver:
 			self.browser = webdriver.Chrome(driver)
 			self.Chrome = True
-
 		else:
 			self.browser = webdriver.Safari()
 
-
 	def open(self, item):
 		self.browser.get(item.url)
-
 	def getPrice(self, item):
 		self.open(item)
 		if self.Chrome:
-			self.getChromePrice()
+			price = self.getChromePrice()
 		else:
-			self.getSafariPrice()
-
+			price = self.getSafariPrice()
+		item.setPrice(price)
+		return price
 	def getChromePrice(self):
 		ID = 'corePrice_feature_div'
 		by = By.ID
@@ -33,7 +36,6 @@ class Browser():
 			item.setPrice(price)
 		except:
 			pass
-		print(price)
 		return price
 	def getSafariPrice(self):
 		ID = 'a-price-whole'
@@ -44,8 +46,9 @@ class Browser():
 			item.setPrice(price)
 		except:
 			pass
-		print(type(price))
 		return price
+	def execute(self, job):
+		return self.getPrice(job)
 
 class Item():
 	def __init__(self, item, url):
@@ -54,7 +57,6 @@ class Item():
 		self.price = None
 	def setPrice(self, p):
 		self.price = p
-		print('price =',p)
 	def getPrice(self):
 		if self.price:
 			return self.price
@@ -64,14 +66,79 @@ class Item():
 	def __str__(self):
 		return f'{self.getName()} - ${self.getPrice()}'
 
+class Job(threading.Thread):
+	def __init__(self, id, driver, jobs):
+		super().__init__()
+		self.id = id
+		self.driver = driver
+		self.jobs = jobs
+		self.output = []
+	def run(self):
+		t = time.time()
+		jobs = self.jobs
+		print(f'[{self.id}] -> Job Running...')
+		if type(jobs) == list:
+			for i, job in enumerate(jobs):
+				out = self.driver.execute(job)
+				self.output.append(out)
+				print(f'[{self.id}] -> Job [{i+1}] of [{len(jobs)}]')
+		else:
+			out = self.driver.execute(jobs)
+			self.output.append(out)
+		print(f'[{self.id}] -> Job Complete {time.time()-t:.2f}s')
+
+def getNumJobs(size):
+	num_jobs = min(size-1,5)
+	while size%num_jobs != 0:
+		num_jobs-=1
+		if num_jobs == 0:
+			num_jobs = 1
+			break
+	return num_jobs
+def getItems(data):
+	items = []
+	size = len(data['date'])
+	for i in range(size):
+		name = data['name'][i]
+		url = data['url'][i]
+		item = Item(name, url)
+		items.append(item)
+	return items
+
+def partition(size, parts):
+	p = []
+	for i in range(parts):
+		start = i*(size//parts)
+		end = (i+1)*size//parts
+		p.append((start,end))
+	return p
+
+
+
+def test():
+	data = readCSV('txt/amazon_list.csv')
+	items = getItems(data)
+	size = len(items)
+	num_jobs = getNumJobs(size)
+	p_indx = partition(size, num_jobs)
+	print(p_indx)
+	
+	jobs = [Job(i, Browser(driver), p_items[i]) for i in range(num_jobs)]
+		
+	for j in jobs:
+		j.start()
+	for j in jobs:
+		j.join()
+	for i in items:
+		print(i)
+
 def main():
-	driver = path.dirname(path.realpath(__name__)) + '/chromedriver'
-	b = Browser()
-	ssd = Item('ssd', 'https://www.amazon.com/dp/B08V7GT6F3/?coliid=I3NYUVEK83KWIE&colid=1LAJEQL0430W6&psc=1&ref_=gv_vv_lig_pi_dp')
-	i5 = Item('i5 CPU', 'https://www.amazon.com/dp/B09FXFJW2F/?coliid=I1F3G29H9WS1UD&colid=1LAJEQL0430W6&psc=1&ref_=gv_ov_lig_pi_dp')
-	b.getPrice(ssd)
-	b.getPrice(i5)
-	print(ssd,i5)
+	
+	
+	test()
+
+	
+
 
 
 if __name__ == '__main__':
