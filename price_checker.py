@@ -4,9 +4,9 @@ from selenium.webdriver.common.keys import Keys
 from os import path
 import threading
 import time
-from tools import readCSV
+from tools import readCSV, partitionIndex
 
-driver = path.dirname(path.realpath(__name__)) + '/chromedriver'
+DRIVER_PATH = path.dirname(path.realpath(__name__)) + '/chromedriver'
 
 class Browser():
 	def __init__(self, driver = None):
@@ -105,25 +105,14 @@ def getItems(data):
 		items.append(item)
 	return items
 
-def partition(size, parts):
-	p = []
-	for i in range(parts):
-		start = i*(size//parts)
-		end = (i+1)*size//parts
-		p.append((start,end))
-	return p
-
-
-
 def test():
 	data = readCSV('txt/amazon_list.csv')
 	items = getItems(data)
 	size = len(items)
 	num_jobs = getNumJobs(size)
-	p_indx = partition(size, num_jobs)
-	print(p_indx)
+	p_indx = partitionIndex(size, num_jobs)
 	
-	jobs = [Job(i, Browser(driver), p_items[i]) for i in range(num_jobs)]
+	jobs = [Job(i, Browser(DRIVER_PATH), p_items[i]) for i in range(num_jobs)]
 		
 	for j in jobs:
 		j.start()
@@ -133,13 +122,7 @@ def test():
 		print(i)
 
 def main():
-	
-	
 	test()
-
-	
-
-
 
 if __name__ == '__main__':
 	main()
