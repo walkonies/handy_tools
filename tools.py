@@ -202,6 +202,17 @@ def printLocals(locals, show_all=False):
 			else:
 				print(f'{key} = {val}')
 
+def partitionIndex(size, num_parts):
+	'''
+	Returns partiton indicies into evenly divisible buckets
+	'''
+	p = []
+	for i in range(num_parts):
+		start = i*(size//num_parts)
+		end = (i+1)*size//num_parts
+		p.append((start,end))
+	return p
+
 
 '''
 ##FILE TOOLS##
