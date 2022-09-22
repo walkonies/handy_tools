@@ -237,25 +237,26 @@ def readFile(file):
 
 	return lines
 
-def log(file, data):
+def log(path, data):
 	'''
 	Append data to .txt
 	'''
-	with open(file, 'a')as f:
+	with open(path, 'a')as f:
 		write(f,data)
 
-def makeTxt(data):
+def makeTxt(data, path=None):
 	'''
 	List -> .txt
 	'''
-	file = f'{dir_path}/{getTime()}.txt'
-	with open (file, 'w') as f:
+	if path is None:
+		path = f'{dir_path}/{getTime()}.txt'
+	with open (path, 'w') as f:
 		write(f,data)
 
-	print(f'Writing to file "{file}"... ')
+	print(f'Writing to file "{path}"... ')
 	# open file
-	os.system(f'open {file}')
-	return file
+	os.system(f'open {path}')
+	return path
 
 def write(f, data):
 	'''
